@@ -23,7 +23,7 @@ const userScheama = new mongoose.Schema(
         },
         salt: String,
         role: {
-            type: String,
+            type: Number,
             default: 0
         },
         resetPasswordLink: {
@@ -38,23 +38,23 @@ const userScheama = new mongoose.Schema(
 // virtual
 userScheama
     .virtual('password')
-    .set(function(password) {
+    .set(function (password) {
         this._password = password;
         this.salt = this.makeSalt();
         this.hashed_password = this.encryptPassword(password);
     })
-    .get(function() {
+    .get(function () {
         return this._password;
     });
 
-    
+
 // methods
 userScheama.methods = {
-    authenticate: function(plainText) {
+    authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
 
-    encryptPassword: function(password) {
+    encryptPassword: function (password) {
         if (!password) return '';
         try {
             return crypto
@@ -66,8 +66,8 @@ userScheama.methods = {
         }
     },
 
-    
-    makeSalt: function() {
+
+    makeSalt: function () {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 };
