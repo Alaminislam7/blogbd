@@ -4,6 +4,15 @@ const { match } = require('assert');
 // user schema
 const userScheama = new mongoose.Schema(
     {
+        username: {
+            type: String,
+            trim: true,
+            required: true,
+            max: 32,
+            unique: true,
+            index: true,
+            lowercase: true
+        },
         name: {
             type: String,
             trim: true,
@@ -14,17 +23,29 @@ const userScheama = new mongoose.Schema(
             type: String,
             trim: true,
             required: true,
+            max: 32,
             unique: true,
             lowercase: true
+        },
+        profile: {
+            type: String,
+            required: true
         },
         hashed_password: {
             type: String,
             required: true
         },
         salt: String,
+        about: {
+            type: String
+        },
         role: {
             type: Number,
             default: 0
+        },
+        photo: {
+            data: Buffer,
+            contentType: String
         },
         resetPasswordLink: {
             data: String,
