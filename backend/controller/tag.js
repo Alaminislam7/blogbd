@@ -38,22 +38,20 @@ exports.getTag = (req, res) => {
         error: errorHandler(err),
       });
     }
-    res.json(tag);
-    // Blog.find({ tags: tag })
-    //   .populate('categories', '_id name slug')
-    //   .populate('tags', '_id name slug')
-    //   .populate('postedBy', '_id name username')
-    //   .select(
-    //     '_id title slug excerpt categories postedBy tags createdAt updatedAt'
-    //   )
-    //   .exec((err, data) => {
-    //     if (err) {
-    //       return res.status(400).json({
-    //         error: errorHandler(err),
-    //       });
-    //     }
-    //     res.json({ tag: tag, blogs: data });
-    //   });
+    // res.json(tag);
+    Blog.find({ tags: tag })
+      .populate('categories', '_id name slug')
+      .populate('tags', '_id name slug')
+      .populate('postedBy', '_id name')
+      .select('_id title slug excerpt categories postedBy tags createdAt updatedAt')
+      .exec((err, data) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err)
+          });
+        }
+        res.json({ tag: tag, blogs: data });
+      });
   });
 };
 
