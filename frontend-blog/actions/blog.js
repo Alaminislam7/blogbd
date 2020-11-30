@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { API } from '../config';
+import queryString from 'query-string'
 
 export const createBlog = (blog, token) => {
 
@@ -25,13 +26,14 @@ export const fetchBlogsWithCategoriesAndTags = (skip, limit) => {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    // send skip and limit data from client side to backened
-    body: JSON.stringify(data),
+    body: JSON.stringify(data)
   })
-    .then((response) => response.json())
-    .catch((error) => console.error(error));
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 export const singleBlog = slug => {
@@ -46,57 +48,68 @@ export const singleBlog = slug => {
 
 export const listRelated = blog => {
   return fetch(`${API}/blogs/related`, {
-      method: 'POST',
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(blog)
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(blog)
   })
-      .then(response => {
-          return response.json();
-      })
-      .catch(err => console.log(err));
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 export const getBlogs = () => {
   return fetch(`${API}/blogs`, {
-      method: 'GET'
+    method: 'GET'
   })
-      .then(response => {
-          return response.json();
-      })
-      .catch(err => console.log(err));
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 export const removeBlog = (slug, token) => {
   return fetch(`${API}/blog/${slug}`, {
-      method: 'DELETE',
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-      }
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
   })
-      .then(response => {
-          return response.json();
-      })
-      .catch(err => console.log(err));
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 export const updateBlog = (blog, token, slug) => {
   return fetch(`${API}/blog/${slug}`, {
-      method: 'PUT',
-      headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`
-      },
-      body: blog
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: blog
   })
-      .then(response => {
-          return response.json();
-      })
-      .catch(err => console.log(err));
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
-
+export const listSearch = params => {
+  console.log('search params', params);
+  let query = queryString.stringify(params);
+  console.log('query params', query);
+  return fetch(`${API}/blogs/search?${query}`, {
+    method: 'GET'
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
